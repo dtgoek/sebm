@@ -1,8 +1,9 @@
-"# surface energy balance model" 
+# surface energy balance model" 
 
 The model uses high resolution land surface tempertaure maps (LST) to solve a surface energy balance model (sebm) for debris thickness.
 
 The model follows the princible that all energy fluxes at the earth surface must sum to zero:
+
 S+L(LST)+H(LST)+dS(LST, d)+G(LST, d)=0
 
 S = shortwave radiation
