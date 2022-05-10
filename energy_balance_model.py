@@ -7,11 +7,19 @@ from datetime import datetime, timedelta
 from scipy import interpolate
 
 
+'''
+Surface energy balance functions
 
-#SOLAR GEOMETRY
-#https://github.com/tomderuijter/python-dem-shadows/blob/master/python_dem_shadows/gradient.py
-#https://github.com/joelfiddes/TopoSCALE-CCI/blob/master/solarGeom.py
-#https://github.com/cran/insol/blob/master/man/insol-package.Rd
+implemented by Deniz Gök
+d_goek@gfz-potsdam.de
+'''
+
+#SHORTWAVE RADIATION AND SOLAR GEOMETRY
+'''
+Python implementation of the R Package Insol from Javier G. Corrripio
+https://doi.org/10.1080/713811744
+https://github.com/cran/insol/blob/master/man/insol-package.Rd
+'''
 
 
 def JD(d):
@@ -44,7 +52,7 @@ def eqtime(jd):
     return np.rad2deg(EqTime) * 4
 	 
 def hourangle(jd, longitude, timezone):
-    """Internal function for solar position calculation."""
+    """Function for solar position calculation."""
     hour = ((jd-np.floor(jd))*24+12) % 24
     time_offset=eqtime(jd)
     standard_meridian=timezone * 15
@@ -274,7 +282,10 @@ def relative_humidity(TaK, TdK):
     
     return rh
 
-def z2p(z,P0=101325,T0=288.15):
+def z2p(z):
+    P0=101325
+    T0=288.15
+
     #elevato to pressure
     Earth_G = 9.80665# Acceleration due to gravity (m s-2)
     EarthR = 6.3756766E6 # Average earths radius (m)
@@ -313,7 +324,17 @@ def SatPresWatVap(Ta):
 
 #ENERGY FLUXES AND DEBRIS THICKNESS
 
-def insolation(zenith,jd,height,visibility,RH,tempK,O3,alphag):
+def insolation(zenith,jd,height,RH,tempK):
+    
+    '''
+    based on:
+    Iqbal, M. (1983) An Introduction to Solar Radiation
+    Bird, R. E. and Hulstrom, R. L. (1981b) A simplified clear sky model for direct and diffuse insolation on horizontal surfaces
+    '''
+    O3 = 0.3
+    visibility = 30
+    alphag = 0.2 
+    
     print('zenith:' , zenith)
     Isc = 1361.8   # solar constant (Wm^(-2)) (1)
     theta = np.radians(zenith)
@@ -442,37 +463,6 @@ def calc_shf(TairK, lst, elevation, windspeed, zt, zu, roughness):
     #print('mean H:', np.nanmean(H))
     return H
     
-def interpEra5(era_data, latitude, longitude, listOfVariables):
-    '''
-    nested loop through variables and times in era5 data and interpolate at la, lon
-    '''
-    lat, lon = era_data.variables['latitude'][:], era_data.variables['longitude'][:]
-    
-    timesteps_hours = era_data.variables['time'][:].data # time since 01.01.1900 in hours
-    t0 = "01-01-1900 00:00:00"      
-    t0_dtobj = datetime.strptime(t0, "%d-%m-%Y %H:%M:%S") # convert string into datetime object
-    
-    timesteps_dtobj = [t0_dtobj + pd.Timedelta(hours = i) for i in timesteps_hours]
-    
-
-    extracted_values_variables=[]
-    
-    for variable in listOfVariables:
-        extracted_values_timestep=[]
-        for n, i in enumerate(timesteps_dtobj):
-            all_values= era_data.variables[variable][n, :, :]
-            interpolation_function = interpolate.interp2d(lon, lat, all_values, kind='linear') 
-            interp_value = interpolation_function(longitude, latitude)[0]
-            extracted_values_timestep.append(interp_value)
-        extracted_values_variables.append(extracted_values_timestep)
-    
-    data = pd.DataFrame(extracted_values_variables).transpose()
-    data.columns = listOfVariables
-    data['datetime'] = timesteps_dtobj
-    data = data.set_index('datetime')
-    
-    return data  
-    
 def quadraticEq(a, b, c):
     
     D = b**2 - (4*a*c)
@@ -490,7 +480,6 @@ def debristhickness_prediction(sw, lw, H, Ts, Ta, w_rate, params):
     Ts and Ta in °C
     '''
     
-    gratio = params['NLA_factor']
     
     density_debris = params['density_d']
     heat_capacity_debris = params['c_d']
@@ -498,7 +487,7 @@ def debristhickness_prediction(sw, lw, H, Ts, Ta, w_rate, params):
     
     a = (density_debris * heat_capacity_debris * w_rate) * -1
     b = sw + lw + H
-    c = gratio*thermal_conductivity * Ts
+    c = thermal_conductivity * Ts
     
     x0, x1 = quadraticEq(a, b, c)
     
@@ -517,10 +506,3 @@ def hillshade(array,azimuth,angle_altitude):
     
     return 255*(shaded + 1)/2
     
-# define the true objective function
-def rational_curve(x, c1, c2):
-    y = x / (c1 + c2*x)
-    return y 
-    
-def rmse(predictions, targets):
-    return np.sqrt(((predictions - targets) ** 2).mean())  
