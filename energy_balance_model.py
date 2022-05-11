@@ -368,7 +368,7 @@ def insolation(zenith,jd,height,RH,tempK):
 
     return (In, Id)
 
-def calc_sin(dt_object,latitude,longitude,timezone, dem, res, vis, relhum, TairK, O3, albedo_surrounding, shadow_surrounding=None):
+def calc_sin(dt_object,latitude,longitude,timezone, dem, res, relhum, TairK, shadow_surrounding=None):
     
     '''
     zenith, jd, elevation, vis, relhum, TairK, O3, albedo_surrounding, shadow_surrounding (cast shadow)
@@ -396,7 +396,7 @@ def calc_sin(dt_object,latitude,longitude,timezone, dem, res, vis, relhum, TairK
     if shadow_surrounding is not None:
         shade= shade*shadow_surrounding
     
-    insol = insolation(zenith, jd, mean_elevation, vis, relhum, TairK, O3, albedo_surrounding)
+    insol = insolation(zenith, jd, mean_elevation, relhum, TairK)
     
     if zenith<90:
         direct = insol[0]
