@@ -6,12 +6,18 @@ The model follows the principle that all energy fluxes (W/m-2) at the earth surf
 S + L(LST) + H(LST) + dS(LST, d) + G(LST, d) = 0
 
 S = net shortwave radiation
+
 L = net longwave radiation
+
 H = sensible heat fluxes
-dS = rate of change of heat storage
+
+dS = rate of change of heat storage \
+
 G = ground heat flux
+
 LST = land surface temperature
-d = debris thickness
+
+d = debris thickness 
 
 DATA INPUT
 1) LST maps
