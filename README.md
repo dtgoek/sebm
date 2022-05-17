@@ -11,7 +11,7 @@ H = sensible heat fluxes \
 dS = rate of change of heat storage \
 G = ground heat flux \
 LST = land surface temperature \
-d = debris thickness \
+d = debris thickness
 
 DATA INPUT
 1) LST maps
