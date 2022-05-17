@@ -19,6 +19,9 @@ DATA INPUT
 3) Meteorological data (air temperature, wind speed and relative humidity)
 4) Other parameters
 
+Additional information about the dataset in data/dataset_information.txt
+
+
 RUN THE MODEL
 
 To run the model and produce debris thickness maps run both notebooks in following order
