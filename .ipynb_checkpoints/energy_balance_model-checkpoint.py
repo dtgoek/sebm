@@ -180,6 +180,14 @@ def _cast_shadow(row, col, rows, cols, dl, in_sun, inverse_sun_vector,
                  normal_sun_vector, z):
     n = 0
     z_previous = -sys.float_info.max
+    """
+    Uitleg Hans
+    ------------
+    Inverse sun vector staat je toe de projectie op projectievlak terug te rekenen
+    naar de originele matrix.
+    De dx en dy representeren tot hoever de schaduw rijkt vanaf de huidige cel.
+    Normal sun vector is het vlak loodrecht op de richting van de zon.
+    """
 
     while True:
         # Calculate projection offset
@@ -258,6 +266,8 @@ def relative_humidity(TaK, TdK):
     '''
     Tak: air temperature  [K]
     TdK: dew point temperature [K]
+    
+    https://earthscience.stackexchange.com/questions/16570/how-to-calculate-relative-humidity-from-temperature-dew-point-and-pressure
 
     https://bmcnoldy.rsmas.miami.edu/Humidity.html
     Alduchov, O. A., and R. E. Eskridge, 1996: Improved Magnus' form approximation of saturation vapor pressure. J. Appl. Meteor., 35, 601–609.
