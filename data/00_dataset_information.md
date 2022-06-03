@@ -16,7 +16,7 @@ Overlapping thermal images have been previously processed into orthomosaic maps 
 
 _20190830_class (*.GeoTiFF)_
 
-File naming: YYYYMMDD_class.tif
+File naming: YYYYMMDD_class.tif \
 Data processed by Deniz Gök
 
 Classification layer, based on the 15 h LST file. Supervised classification using a random forest algorithm with manually created training data.
