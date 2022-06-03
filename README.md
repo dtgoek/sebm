@@ -1,6 +1,6 @@
 # High-resolution debris cover mapping using UAV-derived thermal imagery
 
-The model uses high resolution land surface temperature maps (LST) obtained from a uncrewed aerial vehicle (UAV) to solve a surface energy balance model (SEBM) for spatially distributed debris thicknesses at various times of a day. The diurnal variability allows for consideration of the rate of change of heat storage.
+The model uses high resolution land surface temperature maps (LST) obtained from a unpiloted aerial vehicle (UAV) to solve a surface energy balance model (SEBM) for spatially distributed debris thicknesses at various times of a day. The diurnal variability allows for consideration of the rate of change of heat storage.
 The model follows the principle that all energy fluxes (W/m-2) at the earth surface must sum to zero:
 
 S + L(LST) + H(LST) + dS(LST, d) + G(LST, d) = 0
